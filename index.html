@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CPA Study Hub — Study smarter. Pass with confidence.</title>
+<style>
+:root{
+  --bg:#f5f7fb; --card:#fff; --ink:#172033; --muted:#687386; --line:#e6eaf0;
+  --primary:#4f46e5; --primary2:#7c3aed; --good:#0f9d72; --warn:#d97706;
+  --shadow:0 14px 40px rgba(25,35,60,.08); --radius:20px;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif;background:var(--bg);color:var(--ink)}
+button,input,select{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.app{display:flex;min-height:100vh}
+.sidebar{width:250px;background:#111827;color:#fff;padding:24px 16px;position:fixed;inset:0 auto 0 0;z-index:5}
+.brand{font-weight:800;font-size:21px;padding:8px 12px 28px;letter-spacing:-.5px}
+.brand span{color:#a5b4fc}
+.nav button{display:flex;width:100%;border:0;background:transparent;color:#cbd5e1;padding:12px 13px;border-radius:12px;text-align:left;margin:5px 0;gap:12px;align-items:center}
+.nav button.active,.nav button:hover{background:#272f43;color:#fff}
+.nav .icon{width:22px;text-align:center}
+.side-note{position:absolute;left:16px;right:16px;bottom:20px;background:#1e293b;border:1px solid #334155;border-radius:15px;padding:14px;font-size:12px;color:#cbd5e1;line-height:1.5}
+.main{margin-left:250px;width:calc(100% - 250px);padding:28px;max-width:1500px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:26px}
+.eyebrow{font-size:12px;font-weight:800;color:var(--primary);text-transform:uppercase;letter-spacing:1.2px}
+h1{margin:4px 0;font-size:31px;letter-spacing:-1px}
+.subtitle{color:var(--muted);font-size:14px}
+.top-actions{display:flex;gap:10px;align-items:center}
+.btn{border:0;border-radius:12px;padding:11px 15px;font-weight:700}
+.btn.primary{background:var(--primary);color:#fff}
+.btn.secondary{background:#fff;border:1px solid var(--line);color:var(--ink)}
+.btn.small{padding:8px 11px;font-size:12px}
+.grid{display:grid;gap:18px}
+.grid.stats{grid-template-columns:repeat(4,1fr)}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:19px;box-shadow:var(--shadow)}
+.stat .label{color:var(--muted);font-size:13px}.stat .value{font-size:27px;font-weight:800;margin-top:5px}.stat .delta{font-size:12px;color:var(--good);margin-top:5px}
+.grid.main-grid{grid-template-columns:1.5fr 1fr;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:21px;box-shadow:var(--shadow)}
+.card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:15px}
+.card h2{font-size:17px;margin:0}.muted{color:var(--muted)}
+.progress{height:9px;background:#edf0f5;border-radius:99px;overflow:hidden}.progress>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:99px}
+.section-list{display:grid;gap:11px}
+.section{display:grid;grid-template-columns:52px 1fr auto;gap:13px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:15px}
+.section .badge{width:46px;height:46px;border-radius:13px;display:grid;place-items:center;background:#eef2ff;color:#4338ca;font-weight:900}
+.section .name{font-weight:800}.section .desc{font-size:12px;color:var(--muted);margin-top:3px}
+.section .pct{font-weight:800;font-size:13px;margin-bottom:5px;text-align:right}
+.task{display:flex;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);align-items:center}.task:last-child{border-bottom:0}
+.check{width:22px;height:22px;border:2px solid #cbd5e1;border-radius:7px;background:#fff;flex:0 0 auto}.check.done{background:var(--good);border-color:var(--good);position:relative}.check.done:after{content:"✓";color:#fff;position:absolute;font-size:13px;left:4px;top:-1px}
+.task .t-title{font-weight:700;font-size:13px}.task .t-meta{font-size:11px;color:var(--muted);margin-top:3px}
+.timer{display:grid;place-items:center;padding:12px}.clock{font-size:62px;font-weight:850;letter-spacing:-3px;margin:4px 0 12px}.timer-controls{display:flex;gap:8px}
+.quote{background:linear-gradient(135deg,#eef2ff,#f5f3ff);border:1px solid #e0e7ff;padding:16px;border-radius:16px;margin-top:15px;font-size:13px;line-height:1.55}
+.page{display:none}.page.active{display:block}
+.cards-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.subject-card{padding:18px;border-radius:18px;border:1px solid var(--line);background:#fff}
+.subject-card .tag{display:inline-block;padding:5px 8px;border-radius:8px;background:#eef2ff;color:#4338ca;font-weight:800;font-size:11px}
+.subject-card h3{margin:11px 0 5px}.subject-card p{font-size:12px;color:var(--muted);line-height:1.5}
+.flashcard{min-height:280px;display:grid;place-items:center;text-align:center;padding:30px;border-radius:22px;background:linear-gradient(145deg,#111827,#293449);color:white;box-shadow:var(--shadow)}
+.flashcard .fc-label{color:#a5b4fc;font-size:12px;font-weight:800;text-transform:uppercase}.flashcard h2{font-size:27px;max-width:700px}.flashcard p{max-width:650px;line-height:1.6;color:#dbe4f0}
+.quiz-question{font-size:19px;font-weight:800;line-height:1.4;margin:18px 0}.answers{display:grid;gap:10px}.answer{border:1px solid var(--line);background:#fff;padding:13px;border-radius:12px;text-align:left}.answer:hover{border-color:#a5b4fc;background:#f8f8ff}.answer.correct{border-color:#86efac;background:#f0fdf4}.answer.wrong{border-color:#fecaca;background:#fef2f2}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;font-size:12px;font-weight:800;margin-bottom:6px}.field input,.field select{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px;background:#fff}
+.plan-row{display:grid;grid-template-columns:100px 1fr 90px;gap:10px;align-items:center;margin:13px 0}.plan-row small{color:var(--muted)}
+.notice{padding:12px 14px;border-radius:12px;background:#fffbeb;border:1px solid #fde68a;color:#854d0e;font-size:12px;margin-top:15px}
+.footer-note{font-size:11px;color:var(--muted);margin-top:20px;line-height:1.5}
+@media(max-width:1050px){.sidebar{width:205px}.main{margin-left:205px;width:calc(100% - 205px)}.grid.stats{grid-template-columns:repeat(2,1fr)}.grid.main-grid{grid-template-columns:1fr}.cards-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:720px){.sidebar{position:static;width:100%;height:auto}.app{display:block}.main{margin:0;width:100%;padding:18px}.side-note{display:none}.nav{display:flex;overflow:auto}.nav button{white-space:nowrap}.brand{padding-bottom:12px}.topbar{display:block}.top-actions{margin-top:12px}.grid.stats,.cards-grid,.form-grid{grid-template-columns:1fr}.plan-row{grid-template-columns:70px 1fr 60px}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">CPA<span>Study</span> Hub</div>
+    <div class="nav">
+      <button class="active" data-page="dashboard"><span class="icon">⌂</span> Dashboard</button>
+      <button data-page="subjects"><span class="icon">▦</span> Subjects</button>
+      <button data-page="practice"><span class="icon">✓</span> Practice</button>
+      <button data-page="flashcards"><span class="icon">▣</span> Flashcards</button>
+      <button data-page="planner"><span class="icon">◷</span> Study Planner</button>
+    </div>
+    <div class="side-note"><b>Built for the U.S. CPA Exam</b><br>Core: AUD, FAR, REG<br>Discipline: BAR, ISC or TCP</div>
+  </aside>
+
+  <main class="main">
+    <section id="dashboard" class="page active">
+      <div class="topbar">
+        <div><div class="eyebrow">Monday • Study dashboard</div><h1>Good evening, future CPA.</h1><div class="subtitle">Keep today's plan small, focused, and measurable.</div></div>
+        <div class="top-actions"><button class="btn secondary" onclick="resetProgress()">Reset progress</button><button class="btn primary" onclick="showPage('practice')">Start practice →</button></div>
+      </div>
+      <div class="grid stats">
+        <div class="stat"><div class="label">Overall progress</div><div class="value" id="overall">28%</div><div class="delta">+4% this week</div></div>
+        <div class="stat"><div class="label">Questions completed</div><div class="value" id="qcount">184</div><div class="delta">Keep the streak alive</div></div>
+        <div class="stat"><div class="label">Study streak</div><div class="value">7 days</div><div class="delta">Best: 12 days</div></div>
+        <div class="stat"><div class="label">Next exam</div><div class="value">FAR</div><div class="delta">Your active section</div></div>
+      </div>
+
+      <div class="grid main-grid">
+        <div class="card">
+          <div class="card-head"><h2>Section progress</h2><span class="muted" style="font-size:12px">Core + Discipline</span></div>
+          <div class="section-list" id="sectionList"></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Today's focus</h2><button class="btn small secondary" onclick="showPage('planner')">Edit plan</button></div>
+          <div class="task" onclick="toggleTask(this)"><span class="check"></span><div><div class="t-title">FAR — Leases & revenue</div><div class="t-meta">25 MCQs · 35 min</div></div></div>
+          <div class="task" onclick="toggleTask(this)"><span class="check"></span><div><div class="t-title">Review missed questions</div><div class="t-meta">15 min · active recall</div></div></div>
+          <div class="task" onclick="toggleTask(this)"><span class="check"></span><div><div class="t-title">FAR TBS set</div><div class="t-meta">2 simulations · 40 min</div></div></div>
+          <div class="quote">“Don't aim to finish the material. Aim to be able to explain it.”</div>
+        </div>
+      </div>
+
+      <div class="grid main-grid">
+        <div class="card">
+          <div class="card-head"><h2>Quick study timer</h2><span class="muted">25-minute sprint</span></div>
+          <div class="timer"><div class="clock" id="clock">25:00</div><div class="timer-controls"><button class="btn primary" id="timerBtn" onclick="toggleTimer()">Start</button><button class="btn secondary" onclick="resetTimer()">Reset</button></div></div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h2>Exam structure</h2></div>
+          <p class="muted" style="font-size:13px;line-height:1.6">The current U.S. CPA Exam uses three Core sections plus one Discipline section. Each section is four hours.</p>
+          <div class="notice">Tip: use the official AICPA blueprints as your source of truth for what can be tested.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="subjects" class="page">
+      <div class="topbar"><div><div class="eyebrow">Curriculum</div><h1>Subjects</h1><div class="subtitle">A clean starting point for every exam section.</div></div></div>
+      <div class="cards-grid" id="subjectCards"></div>
+      <div class="footer-note">Content shown here is a study-organizer framework, not official AICPA study material.</div>
+    </section>
+
+    <section id="practice" class="page">
+      <div class="topbar"><div><div class="eyebrow">Practice mode</div><h1>Test yourself</h1><div class="subtitle">Short questions with immediate feedback.</div></div></div>
+      <div class="card">
+        <div class="card-head"><h2 id="quizMeta">FAR · Question 1</h2><span id="scoreLabel" class="muted">Score: 0</span></div>
+        <div class="quiz-question" id="question"></div>
+        <div class="answers" id="answers"></div>
+        <div style="margin-top:15px"><button class="btn secondary" onclick="nextQuestion()">Next question →</button></div>
+      </div>
+    </section>
+
+    <section id="flashcards" class="page">
+      <div class="topbar"><div><div class="eyebrow">Active recall</div><h1>Flashcards</h1><div class="subtitle">Think first. Reveal second.</div></div></div>
+      <div class="flashcard" id="flashcard" onclick="flipCard()"></div>
+      <div style="display:flex;gap:10px;justify-content:center;margin-top:15px"><button class="btn secondary" onclick="prevCard()">← Previous</button><button class="btn primary" onclick="flipCard()">Reveal / hide</button><button class="btn secondary" onclick="nextCard()">Next →</button></div>
+    </section>
+
+    <section id="planner" class="page">
+      <div class="topbar"><div><div class="eyebrow">Planning</div><h1>Build your study week</h1><div class="subtitle">Choose a target and let the dashboard keep you honest.</div></div></div>
+      <div class="card">
+        <div class="form-grid">
+          <div class="field"><label>Target exam section</label><select id="planSection"><option>FAR</option><option>AUD</option><option>REG</option><option>BAR</option><option>ISC</option><option>TCP</option></select></div>
+          <div class="field"><label>Exam date</label><input id="examDate" type="date"></div>
+          <div class="field"><label>Study hours / week</label><input id="hours" type="number" min="1" max="60" value="12"></div>
+          <div class="field"><label>MCQs / week</label><input id="mcqs" type="number" min="10" max="1000" value="150"></div>
+        </div>
+        <button class="btn primary" style="margin-top:16px" onclick="savePlan()">Save study plan</button>
+      </div>
+      <div class="card" style="margin-top:18px">
+        <div class="card-head"><h2>Suggested weekly rhythm</h2></div>
+        <div class="plan-row"><b>Mon</b><span><b>Learn</b><br><small>New concepts + notes</small></span><span>2h</span></div>
+        <div class="plan-row"><b>Tue</b><span><b>Practice</b><br><small>MCQs + explanations</small></span><span>2h</span></div>
+        <div class="plan-row"><b>Wed</b><span><b>Review</b><br><small>Weak areas + flashcards</small></span><span>1.5h</span></div>
+        <div class="plan-row"><b>Thu</b><span><b>Practice</b><br><small>MCQs + TBS</small></span><span>2h</span></div>
+        <div class="plan-row"><b>Fri</b><span><b>Light review</b><br><small>Errors + formulas</small></span><span>1h</span></div>
+        <div class="plan-row"><b>Weekend</b><span><b>Mock session</b><br><small>Timed mixed set</small></span><span>3.5h</span></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+const sections=[
+ {code:'AUD',name:'Auditing & Attestation',type:'Core',pct:34,desc:'Audits, attestation, ethics and professional responsibilities'},
+ {code:'FAR',name:'Financial Accounting & Reporting',type:'Core',pct:28,desc:'Financial statements, transactions and reporting'},
+ {code:'REG',name:'Taxation & Regulation',type:'Core',pct:22,desc:'Federal tax, business law and professional responsibilities'},
+ {code:'BAR',name:'Business Analysis & Reporting',type:'Discipline',pct:15,desc:'Analysis, technical accounting, reporting and data'},
+ {code:'ISC',name:'Information Systems & Controls',type:'Discipline',pct:10,desc:'IT audit, SOC, data, security and privacy'},
+ {code:'TCP',name:'Tax Compliance & Planning',type:'Discipline',pct:8,desc:'Advanced tax compliance and planning'}
+];
+const questions=[
+ {q:'Which financial statement is primarily designed to show an entity’s financial position at a point in time?',a:['Income statement','Balance sheet','Statement of cash flows','Statement of changes in equity'],c:1,e:'The balance sheet reports assets, liabilities and equity at a specific date.'},
+ {q:'In an audit, which assertion addresses whether all transactions that should have been recorded are recorded?',a:['Existence','Completeness','Valuation','Rights and obligations'],c:1,e:'Completeness focuses on whether everything that should be recorded is included.'},
+ {q:'A taxpayer’s adjusted gross income is generally calculated before or after itemized deductions?',a:['Before','After','Only after credits','It depends on the state'],c:0,e:'AGI is generally determined before itemized or standard deductions.'},
+ {q:'What is the main purpose of an internal control?',a:['Guarantee no fraud occurs','Provide reasonable assurance over objectives','Increase tax rates','Eliminate audit risk entirely'],c:1,e:'Controls provide reasonable, not absolute, assurance that objectives will be achieved.'}
+];
+const cards=[
+ ['FAR','What does “recognition” mean in financial reporting?','Recognition is the process of including an item in the financial statements when it meets the relevant criteria.'],
+ ['AUD','What is audit risk?','The risk that an auditor expresses an inappropriate opinion when the financial statements are materially misstated.'],
+ ['REG','What is adjusted gross income (AGI)?','Generally, gross income less allowable adjustments, before the standard or itemized deduction.'],
+ ['ISC','What is least privilege?','A security principle where users receive only the access necessary to perform their authorized duties.'],
+ ['BAR','What is horizontal analysis?','Comparing financial statement amounts across periods to identify changes and trends.'],
+ ['TCP','What is tax planning?','Arranging transactions or choices within the rules to manage tax consequences and meet financial objectives.']
+];
+
+let quizIndex=0, score=0, answered=false, cardIndex=0, revealed=false;
+let seconds=1500,timer=null;
+
+function showPage(id){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+ if(id==='practice') renderQuestion();
+ if(id==='flashcards') renderCard();
+ window.scrollTo({top:0,behavior:'smooth'});
+}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showPage(b.dataset.page)));
+
+function renderSections(){
+ const el=document.getElementById('sectionList');
+ el.innerHTML=sections.map(s=>`<div class="section">
+   <div class="badge">${s.code}</div><div><div class="name">${s.name} <span class="muted" style="font-size:10px">· ${s.type}</span></div><div class="desc">${s.desc}</div><div class="progress" style="margin-top:9px"><div style="width:${s.pct}%"></div></div></div>
+   <div><div class="pct">${s.pct}%</div><button class="btn small secondary" onclick="showPage('practice')">Practice</button></div>
+ </div>`).join('');
+}
+function renderSubjects(){
+ document.getElementById('subjectCards').innerHTML=sections.map(s=>`<div class="subject-card"><span class="tag">${s.type}</span><h3>${s.code} — ${s.name}</h3><p>${s.desc}</p><button class="btn small primary" onclick="showPage('practice')">Practice ${s.code}</button></div>`).join('');
+}
+function renderQuestion(){
+ const x=questions[quizIndex];
+ document.getElementById('quizMeta').textContent=`FAR · Question ${quizIndex+1} of ${questions.length}`;
+ document.getElementById('scoreLabel').textContent=`Score: ${score}`;
+ document.getElementById('question').textContent=x.q;
+ document.getElementById('answers').innerHTML=x.a.map((a,i)=>`<button class="answer" onclick="answer(${i})">${String.fromCharCode(65+i)}. ${a}</button>`).join('');
+ answered=false;
+}
+function answer(i){
+ if(answered)return; answered=true;
+ const x=questions[quizIndex], btns=[...document.querySelectorAll('.answer')];
+ btns[x.c].classList.add('correct'); if(i!==x.c)btns[i].classList.add('wrong'); else score++;
+ document.getElementById('scoreLabel').textContent=`Score: ${score}`;
+ document.getElementById('question').innerHTML=x.q+`<div style="font-size:13px;font-weight:500;color:#687386;margin-top:14px"><b>Why:</b> ${x.e}</div>`;
+ document.getElementById('qcount').textContent=184+score;
+}
+function nextQuestion(){quizIndex=(quizIndex+1)%questions.length;renderQuestion()}
+function renderCard(){
+ const c=cards[cardIndex];
+ document.getElementById('flashcard').innerHTML=revealed?`<div><div class="fc-label">${c[0]} · Answer</div><p>${c[2]}</p><small>Click the card to hide</small></div>`:`<div><div class="fc-label">${c[0]} · Prompt</div><h2>${c[1]}</h2><small>Click the card to reveal</small></div>`;
+}
+function flipCard(){revealed=!revealed;renderCard()}
+function nextCard(){cardIndex=(cardIndex+1)%cards.length;revealed=false;renderCard()}
+function prevCard(){cardIndex=(cardIndex-1+cards.length)%cards.length;revealed=false;renderCard()}
+
+function toggleTask(row){const c=row.querySelector('.check');c.classList.toggle('done');}
+function fmt(s){return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0')}
+function updateClock(){document.getElementById('clock').textContent=fmt(seconds)}
+function toggleTimer(){
+ if(timer){clearInterval(timer);timer=null;document.getElementById('timerBtn').textContent='Start';return}
+ document.getElementById('timerBtn').textContent='Pause';
+ timer=setInterval(()=>{seconds--;updateClock();if(seconds<=0){clearInterval(timer);timer=null;alert('Sprint complete. Take a short break!');document.getElementById('timerBtn').textContent='Start';}},1000);
+}
+function resetTimer(){if(timer){clearInterval(timer);timer=null}seconds=1500;updateClock();document.getElementById('timerBtn').textContent='Start'}
+function savePlan(){
+ localStorage.setItem('cpaPlan',JSON.stringify({section:planSection.value,date:examDate.value,hours:hours.value,mcqs:mcqs.value}));
+ alert('Study plan saved.');
+}
+function loadPlan(){
+ const p=JSON.parse(localStorage.getItem('cpaPlan')||'null'); if(!p)return;
+ planSection.value=p.section||'FAR';examDate.value=p.date||'';hours.value=p.hours||12;mcqs.value=p.mcqs||150;
+}
+function resetProgress(){if(confirm('Reset the demo dashboard progress?')){localStorage.removeItem('cpaPlan');location.reload()}}
+renderSections();renderSubjects();renderQuestion();renderCard();updateClock();loadPlan();
+</script>
+</body>
+</html>
